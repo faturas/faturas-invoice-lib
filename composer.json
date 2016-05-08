@@ -1,0 +1,25 @@
+{
+    "name": "meuk/faturas-invoice-lib",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.3"
+    },
+    "authors": [
+        {
+            "name": "Patrick van Oostrom",
+            "email": "patrick@meukinc.nl"
+        }
+    ],
+	"autoload": {
+        "psr-4": {
+            "Butler\\Invoice\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Butler\\Invoice\\Test\\": "tests/src/"
+        }
+    }
+}
