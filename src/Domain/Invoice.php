@@ -20,6 +20,11 @@ class Invoice
      */
     private $VATPercentage;
 
+    /**
+     * @var Line[]
+     */
+    private $invoiceLines;
+
     public function __construct(int $invoiceNumber)
     {
         if (0 === $invoiceNumber) {
@@ -31,7 +36,11 @@ class Invoice
         $this->invoiceLines = [];
     }
 
-    public function addInvoiceLine(Invoice\Line $invoiceLine)
+    /**
+     * @param Line $invoiceLine
+     * @return $this
+     */
+    public function addInvoiceLine(Line $invoiceLine)
     {
         $this->invoiceLines[] = $invoiceLine;
 
@@ -79,10 +88,13 @@ class Invoice
         return $total;
     }
 
+    /**
+     * @return float|int
+     */
     public function getTotalAmountWithVAT()
     {
         $totalWithVAT = $this->getTotalAmount() * (1 + ($this->getVATPercentage() / 100));
-        
+
         return $totalWithVAT;
     }
 }

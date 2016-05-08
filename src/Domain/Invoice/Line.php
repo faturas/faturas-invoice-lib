@@ -17,12 +17,66 @@ class Line
      */
     private $price;
 
+    /**
+     * @var string
+     */
+    private $summary;
+
+    /**
+     * @var string
+     */
+    private $description;
+
     public function __construct(float $amount, float $price)
     {
         $this->amount = $amount;
         $this->price = $price;
     }
 
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return $this
+     */
+    public function setDescription($description)
+    {
+        if ($description == '') {
+            throw new \InvalidArgumentException('An invoice line needs a description');
+        }
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSummary()
+    {
+        return $this->summary;
+    }
+
+    /**
+     * @param string $summary
+     * @return $this
+     */
+    public function setSummary($summary)
+    {
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
     public function getLineTotal()
     {
         return $this->amount * $this->price;

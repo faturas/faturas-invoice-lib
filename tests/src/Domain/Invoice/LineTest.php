@@ -17,6 +17,41 @@ class LineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($line->getLineTotal(), $total);
     }
 
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function setEmptyLineDescription()
+    {
+        $line = new Line(1, 1);
+        $line->setDescription('');
+    }
+
+    /**
+     * @test
+     * @dataProvider descriptionProvider
+     */
+    public function setAndGetDescription($description)
+    {
+        $line = new Line(1,1);
+        $line->setDescription($description);
+
+        $this->assertEquals($line->getDescription(), $description);
+    }
+
+
+    /**
+     * @test
+     * @dataProvider summaryProvider
+     */
+    public function setAndGetSummary($summary)
+    {
+        $line = new Line(1,1);
+        $line->setSummary($summary);
+
+        $this->assertEquals($line->getSummary(), $summary);
+    }
+
     public function lineAmountsProvider()
     {
         return [
@@ -26,4 +61,21 @@ class LineTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function descriptionProvider()
+    {
+        return [
+            ['Setting up API Client, wrote documentation'],
+            ['Agile coaching and support, story writing'],
+            ['Server maintenance, installed new packages and updates']
+        ];
+    }
+
+    public function summaryProvider()
+    {
+        return [
+            ['API Development'],
+            ['Coaching'],
+            ['Server Maintenance']
+        ];
+    }
 }
