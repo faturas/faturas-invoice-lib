@@ -57,6 +57,30 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @test
+     * @dataProvider getInvoiceLineStack
+     */
+    public function calculateVATAmount($invoiceLines, $VAT, $total)
+    {
+        $invoice = new Invoice(1);
+        foreach ($invoiceLines as $invoiceLine) {
+            $invoice->addInvoiceLine($invoiceLine);
+        }
+        $invoice->setVATPercentage($VAT);
+        $this->assertEquals($invoice->getVATAmount(), $total['VAT']);
+    }
+
+    /**
+     * @test
+     */
+    public function invoiceCreatedAt()
+    {
+        $invoice = new Invoice(1);
+
+        $this->assertNotNull($invoice->getCreatedAt());
+    }
+
     public function getInvoiceLineStack()
     {
         return [
@@ -70,7 +94,8 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                 21,
                 [
                     'total' => 326,
-                    'totalVAT' => 394.46
+                    'totalVAT' => 394.46,
+                    'VAT' => 68.46
                 ]
             ],
             [
@@ -83,7 +108,22 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                 32,
                 [
                     'total' => 635,
-                    'totalVAT' => 838.2
+                    'totalVAT' => 838.2,
+                    'VAT' => 203.2
+                ]
+            ],
+            [
+                [
+                    new Invoice\Line(6, 15),
+                    new Invoice\Line(15, 52),
+                    new Invoice\Line(36, 2.50),
+                    new Invoice\Line(3, 600),
+                ],
+                44,
+                [
+                    'total' => 2760,
+                    'totalVAT' => 3974.4,
+                    'VAT' => 1214.4
                 ]
             ]
         ];

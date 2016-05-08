@@ -25,6 +25,11 @@ class Invoice
      */
     private $invoiceLines;
 
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
     public function __construct(int $invoiceNumber)
     {
         if (0 === $invoiceNumber) {
@@ -33,6 +38,7 @@ class Invoice
 
         $this->invoiceNumber = $invoiceNumber;
 
+        $this->createdAt = new \DateTime();
         $this->invoiceLines = [];
     }
 
@@ -75,6 +81,14 @@ class Invoice
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * @return float|int
      */
     public function getTotalAmount()
@@ -97,4 +111,15 @@ class Invoice
 
         return $totalWithVAT;
     }
+
+    /**
+     * @return float|int
+     */
+    public function getVATAmount()
+    {
+        $totalVAT = $this->getTotalAmount() * ($this->getVATPercentage() / 100);
+
+        return $totalVAT;
+    }
+
 }
