@@ -30,6 +30,11 @@ class Invoice
      */
     private $createdAt;
 
+    /**
+     * @var \DateTime
+     */
+    private $sentAt;
+
     public function __construct(int $invoiceNumber)
     {
         if (0 === $invoiceNumber) {
@@ -89,6 +94,22 @@ class Invoice
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getSentAt()
+    {
+        return $this->sentAt;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSent()
+    {
+        return (null !== $this->sentAt);
+    }
+
+    /**
      * @return float|int
      */
     public function getTotalAmount()
@@ -122,4 +143,12 @@ class Invoice
         return $totalVAT;
     }
 
+    public function send()
+    {
+        if (count($this->invoiceLines) == 0) {
+            throw new \DomainException('Unable to send an invoice without invoice lines');
+        }
+
+        $this->sentAt = new \DateTime();
+    }
 }

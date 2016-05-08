@@ -76,9 +76,61 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function invoiceCreatedAt()
     {
+        $dateTime = new \DateTime();
         $invoice = new Invoice(1);
 
-        $this->assertNotNull($invoice->getCreatedAt());
+        $this->assertEquals(
+            $invoice->getCreatedAt()->getTimestamp(),
+            $dateTime->getTimestamp()
+        );
+    }
+
+    /**
+     * @test
+     * @expectedException \DomainException
+     */
+    public function sendInvoiceWithoutLines()
+    {
+        $invoice = new Invoice(1);
+        $invoice->send();
+    }
+
+    /**
+     * @test
+     * @dataProvider getInvoiceLineStack
+     */
+    public function checkIfInvoiceIsSent($invoiceLines)
+    {
+        $invoice = new Invoice(1);
+
+        foreach ($invoiceLines as $invoiceLine) {
+            $invoice->addInvoiceLine($invoiceLine);
+        }
+
+        $invoice->send();
+
+        $this->assertTrue($invoice->isSent());
+    }
+
+    /**
+     * @test
+     * @dataProvider getInvoiceLineStack
+     */
+    public function checkInvoiceSentAtIsSet($invoiceLines)
+    {
+        $dateTime = new \DateTime();
+        $invoice = new Invoice(1);
+
+        foreach ($invoiceLines as $invoiceLine) {
+            $invoice->addInvoiceLine($invoiceLine);
+        }
+
+        $invoice->send();
+
+        $this->assertEquals(
+            $invoice->getSentAt()->getTimestamp(),
+            $dateTime->getTimestamp()
+        );
     }
 
     public function getInvoiceLineStack()
