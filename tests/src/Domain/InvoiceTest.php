@@ -3,6 +3,8 @@
 namespace Butler\Test\Invoice\Domain;
 
 use Butler\Invoice\Domain\Invoice;
+use Butler\Invoice\Domain\Invoice\PaymentTerm;
+use ReflectionProperty;
 
 class InvoiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -133,6 +135,23 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @test
+     * @dataProvider getPaymentTermProvider
+     */
+    public function checkIfInvoiceIsOverdue(PaymentTerm $paymentTerm, \DateTime $invoiceDate, \DateTime $currentDateMock, bool $overdue)
+    {
+        $invoice = new Invoice(1);
+
+        // Little whiteboxing, shouldn't hurt right?
+        $property = new ReflectionProperty(Invoice::class, 'sentAt');
+        $property->setAccessible(true);
+        $property->setValue($invoice, $invoiceDate);
+
+        $invoice->setPaymentTerm($paymentTerm);
+        $this->assertEquals($overdue, $invoice->isOverdue($currentDateMock));
+    }
+
     public function getInvoiceLineStack()
     {
         return [
@@ -181,4 +200,14 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function getPaymentTermProvider()
+    {
+        return [
+            [ new PaymentTerm(30), \DateTime::createFromFormat('Y-m-d', '2012-02-12'), \DateTime::createFromFormat('Y-m-d', '2012-06-12'), true ],
+            [ new PaymentTerm(14), \DateTime::createFromFormat('Y-m-d', '2014-06-12'), \DateTime::createFromFormat('Y-m-d', '2014-06-22'), false ],
+            [ new PaymentTerm(30), \DateTime::createFromFormat('Y-m-d', '2011-02-22'), \DateTime::createFromFormat('Y-m-d', '2011-03-24'), false ],
+            [ new PaymentTerm(7),  \DateTime::createFromFormat('Y-m-d', '2015-11-22'), \DateTime::createFromFormat('Y-m-d', '2016-01-22'), true ],
+            [ new PaymentTerm(21), \DateTime::createFromFormat('Y-m-d', '2017-06-12'), \DateTime::createFromFormat('Y-m-d', '2015-06-12'), true ]
+        ];
+    }
 }

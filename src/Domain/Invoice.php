@@ -3,6 +3,7 @@
 namespace Butler\Invoice\Domain;
 
 use Butler\Invoice\Domain\Invoice\Line;
+use Butler\Invoice\Domain\Invoice\PaymentTerm;
 
 /**
  * @author Patrick van Oostrom <patrick.van.oostrom@freshheads.com>
@@ -34,6 +35,11 @@ class Invoice
      * @var \DateTime
      */
     private $sentAt;
+
+    /**
+     * @var PaymentTerm
+     */
+    private $paymentTerm;
 
     public function __construct(int $invoiceNumber)
     {
@@ -110,6 +116,25 @@ class Invoice
     }
 
     /**
+     * @return PaymentTerm
+     */
+    public function getPaymentTerm()
+    {
+        return $this->paymentTerm;
+    }
+
+    /**
+     * @param PaymentTerm $paymentTerm
+     * @return $this
+     */
+    public function setPaymentTerm($paymentTerm)
+    {
+        $this->paymentTerm = $paymentTerm;
+
+        return $this;
+    }
+
+    /**
      * @return float|int
      */
     public function getTotalAmount()
@@ -122,6 +147,7 @@ class Invoice
 
         return $total;
     }
+
 
     /**
      * @return float|int
@@ -150,5 +176,14 @@ class Invoice
         }
 
         $this->sentAt = new \DateTime();
+    }
+
+    public function isOverdue(\DateTime $date)
+    {
+        if ($this->getSentAt()->diff($date)->days > $this->getPaymentTerm()->getDays()) {
+            return true;
+        }
+
+        return false;
     }
 }
