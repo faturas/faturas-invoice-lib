@@ -178,8 +178,12 @@ class Invoice
         $this->sentAt = new \DateTime();
     }
 
-    public function isOverdue(\DateTime $date)
+    public function isOverdue(\DateTime $date = null)
     {
+        if ($date === null) {
+            $date = new \DateTime();
+        }
+        
         if ($this->getSentAt()->diff($date)->days > $this->getPaymentTerm()->getDays()) {
             return true;
         }

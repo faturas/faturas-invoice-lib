@@ -137,6 +137,19 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function checkIfInvoiceIsOverdueWithoutDate()
+    {
+        $invoice = new Invoice(1);
+        $invoice->addInvoiceLine(new Invoice\Line(2, 4));
+        $invoice->send();
+
+        $invoice->setPaymentTerm(new PaymentTerm(21));
+        $this->assertEquals(false, $invoice->isOverdue());
+    }
+
+    /**
+     * @test
      * @dataProvider getPaymentTermProvider
      */
     public function checkIfInvoiceIsOverdue(PaymentTerm $paymentTerm, \DateTime $invoiceDate, \DateTime $currentDateMock, bool $overdue)
