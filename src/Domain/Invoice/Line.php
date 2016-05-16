@@ -45,7 +45,7 @@ class Line
      * @param string $description
      * @return $this
      */
-    public function setDescription($description)
+    public function setDescription($description): Line
     {
         if ($description == '') {
             throw new \InvalidArgumentException('An invoice line needs a description');
@@ -58,7 +58,7 @@ class Line
     /**
      * @return string
      */
-    public function getSummary()
+    public function getSummary(): string
     {
         return $this->summary;
     }
@@ -67,7 +67,7 @@ class Line
      * @param string $summary
      * @return $this
      */
-    public function setSummary($summary)
+    public function setSummary($summary): Line
     {
         $this->summary = $summary;
 
@@ -77,7 +77,7 @@ class Line
     /**
      * @return float
      */
-    public function getLineTotal()
+    public function getLineTotal(): float
     {
         return $this->amount * $this->price;
     }

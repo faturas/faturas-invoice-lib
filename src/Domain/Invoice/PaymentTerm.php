@@ -25,7 +25,7 @@ class PaymentTerm
     /**
      * @return int
      */
-    public function getDays()
+    public function getDays(): int
     {
         return $this->days;
     }
