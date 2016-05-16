@@ -1,8 +1,8 @@
 <?php
 
-namespace Butler\Test\Invoice\Domain\Invoice\Line;
+namespace Faturas\Test\Invoice\Domain\Invoice\Line;
 
-use Butler\Invoice\Domain\Invoice\PaymentTerm;
+use Faturas\Invoice\Domain\Invoice\PaymentTerm;
 
 class PaymentTermTest extends \PHPUnit_Framework_TestCase
 {

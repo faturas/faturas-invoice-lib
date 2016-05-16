@@ -1,8 +1,8 @@
 <?php
 
-namespace Butler\Test\Invoice\Domain\Invoice\Line;
+namespace Faturas\Test\Invoice\Domain\Invoice\Line;
 
-use Butler\Invoice\Domain\Invoice\Line;
+use Faturas\Invoice\Domain\Invoice\Line;
 
 class LineTest extends \PHPUnit_Framework_TestCase
 {

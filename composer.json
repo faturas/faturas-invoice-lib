@@ -14,12 +14,12 @@
     ],
 	"autoload": {
         "psr-4": {
-            "Butler\\Invoice\\": "src/"
+            "Faturas\\Invoice\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Butler\\Invoice\\Test\\": "tests/src/"
+            "Faturas\\Invoice\\Test\\": "tests/src/"
         }
     }
 }

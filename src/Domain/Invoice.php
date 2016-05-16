@@ -1,9 +1,9 @@
 <?php
 
-namespace Butler\Invoice\Domain;
+namespace Faturas\Invoice\Domain;
 
-use Butler\Invoice\Domain\Invoice\Line;
-use Butler\Invoice\Domain\Invoice\PaymentTerm;
+use Faturas\Invoice\Domain\Invoice\Line;
+use Faturas\Invoice\Domain\Invoice\PaymentTerm;
 
 /**
  * @author Patrick van Oostrom <patrick.van.oostrom@freshheads.com>
@@ -57,7 +57,7 @@ class Invoice
      * @param Line $invoiceLine
      * @return $this
      */
-    public function addInvoiceLine(Line $invoiceLine)
+    public function addInvoiceLine(Line $invoiceLine): Invoice
     {
         $this->invoiceLines[] = $invoiceLine;
 
@@ -67,7 +67,7 @@ class Invoice
     /**
      * @return Line[]
      */
-    public function getInvoiceLines()
+    public function getInvoiceLines(): array
     {
         return $this->invoiceLines;
     }
@@ -75,7 +75,7 @@ class Invoice
     /**
      * @return float
      */
-    public function getVATPercentage()
+    public function getVATPercentage(): float
     {
         return $this->VATPercentage;
     }
@@ -84,7 +84,7 @@ class Invoice
      * @param float $VATPercentage
      * @return $this
      */
-    public function setVATPercentage(float $VATPercentage)
+    public function setVATPercentage(float $VATPercentage): Invoice
     {
         $this->VATPercentage = $VATPercentage;
 
@@ -94,7 +94,7 @@ class Invoice
     /**
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -102,7 +102,7 @@ class Invoice
     /**
      * @return \DateTime
      */
-    public function getSentAt()
+    public function getSentAt(): \DateTime
     {
         return $this->sentAt;
     }
@@ -110,7 +110,7 @@ class Invoice
     /**
      * @return bool
      */
-    public function isSent()
+    public function isSent(): bool
     {
         return (null !== $this->sentAt);
     }
@@ -118,7 +118,7 @@ class Invoice
     /**
      * @return PaymentTerm
      */
-    public function getPaymentTerm()
+    public function getPaymentTerm(): PaymentTerm
     {
         return $this->paymentTerm;
     }
@@ -127,7 +127,7 @@ class Invoice
      * @param PaymentTerm $paymentTerm
      * @return $this
      */
-    public function setPaymentTerm($paymentTerm)
+    public function setPaymentTerm($paymentTerm): Invoice
     {
         $this->paymentTerm = $paymentTerm;
 
@@ -137,7 +137,7 @@ class Invoice
     /**
      * @return float|int
      */
-    public function getTotalAmount()
+    public function getTotalAmount(): float
     {
         $total = 0;
 
@@ -152,7 +152,7 @@ class Invoice
     /**
      * @return float|int
      */
-    public function getTotalAmountWithVAT()
+    public function getTotalAmountWithVAT(): float
     {
         $totalWithVAT = $this->getTotalAmount() * (1 + ($this->getVATPercentage() / 100));
 
@@ -162,7 +162,7 @@ class Invoice
     /**
      * @return float|int
      */
-    public function getVATAmount()
+    public function getVATAmount(): float
     {
         $totalVAT = $this->getTotalAmount() * ($this->getVATPercentage() / 100);
 
@@ -178,12 +178,12 @@ class Invoice
         $this->sentAt = new \DateTime();
     }
 
-    public function isOverdue(\DateTime $date = null)
+    public function isOverdue(\DateTime $date = null): bool
     {
         if ($date === null) {
             $date = new \DateTime();
         }
-        
+
         if ($this->getSentAt()->diff($date)->days > $this->getPaymentTerm()->getDays()) {
             return true;
         }

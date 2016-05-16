@@ -1,6 +1,6 @@
 <?php
 
-namespace Butler\Invoice\Domain\Invoice;
+namespace Faturas\Invoice\Domain\Invoice;
 
 /**
  * @author Patrick van Oostrom <patrick.van.oostrom@freshheads.com>

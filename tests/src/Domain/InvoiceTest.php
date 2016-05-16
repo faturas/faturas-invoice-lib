@@ -1,9 +1,9 @@
 <?php
 
-namespace Butler\Test\Invoice\Domain;
+namespace Faturas\Test\Invoice\Domain;
 
-use Butler\Invoice\Domain\Invoice;
-use Butler\Invoice\Domain\Invoice\PaymentTerm;
+use Faturas\Invoice\Domain\Invoice;
+use Faturas\Invoice\Domain\Invoice\PaymentTerm;
 use ReflectionProperty;
 
 class InvoiceTest extends \PHPUnit_Framework_TestCase
