@@ -2,6 +2,7 @@
 
 namespace Faturas\Test\Invoice\Domain;
 
+use Faturas\Invoice\Domain\Customer\Customer;
 use Faturas\Invoice\Domain\Invoice;
 use Faturas\Invoice\Domain\Invoice\PaymentTerm;
 use ReflectionProperty;
@@ -163,6 +164,32 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
         $invoice->setPaymentTerm($paymentTerm);
         $this->assertEquals($overdue, $invoice->isOverdue($currentDateMock));
+    }
+
+    /**
+     * @test
+     */
+    public function testCustomerSetter()
+    {
+        $customer = \Mockery::mock(Customer::class)
+            ->shouldReceive('getEmail')->once()->andReturn('billing@media-butler.nl')
+            ->getMock()
+            ;
+
+        $invoice = new Invoice(1);
+        $invoice->setCustomer($customer);
+    }
+
+    public function testCustomerGetter()
+    {
+        $customer = \Mockery::mock(Customer::class)
+            ->shouldReceive('getEmail')->once()->andReturn('billing@media-butler.nl')
+            ->getMock()
+        ;
+
+        $invoice = new Invoice(1);
+        $invoice->setCustomer($customer);
+        $this->assertEquals('billing@media-butler.nl', $invoice->getCustomer()->getEmail());
     }
 
     public function getInvoiceLineStack()

@@ -2,6 +2,7 @@
 
 namespace Faturas\Invoice\Domain;
 
+use Faturas\Invoice\Domain\Customer\Customer;
 use Faturas\Invoice\Domain\Invoice\Line;
 use Faturas\Invoice\Domain\Invoice\PaymentTerm;
 
@@ -41,6 +42,11 @@ class Invoice
      */
     private $paymentTerm;
 
+    /**
+     * @var Customer
+     */
+    private $customer;
+
     public function __construct(int $invoiceNumber)
     {
         if (0 === $invoiceNumber) {
@@ -49,13 +55,13 @@ class Invoice
 
         $this->invoiceNumber = $invoiceNumber;
 
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTimeImmutable();
         $this->invoiceLines = [];
     }
 
     /**
      * @param Line $invoiceLine
-     * @return $this
+     * @return Invoice
      */
     public function addInvoiceLine(Line $invoiceLine): Invoice
     {
@@ -82,7 +88,7 @@ class Invoice
 
     /**
      * @param float $VATPercentage
-     * @return $this
+     * @return Invoice
      */
     public function setVATPercentage(float $VATPercentage): Invoice
     {
@@ -92,17 +98,17 @@ class Invoice
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeInterface
      */
-    public function getSentAt(): \DateTime
+    public function getSentAt(): \DateTimeInterface
     {
         return $this->sentAt;
     }
@@ -125,13 +131,32 @@ class Invoice
 
     /**
      * @param PaymentTerm $paymentTerm
-     * @return $this
+     * @return Invoice
      */
     public function setPaymentTerm($paymentTerm): Invoice
     {
         $this->paymentTerm = $paymentTerm;
 
         return $this;
+    }
+
+    /**
+     * @param Customer $customer
+     * @return Invoice
+     */
+    public function setCustomer(Customer $customer) : Invoice
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
     }
 
     /**
@@ -169,19 +194,26 @@ class Invoice
         return $totalVAT;
     }
 
+    /**
+     * Send the invoice
+     */
     public function send()
     {
         if (count($this->invoiceLines) == 0) {
             throw new \DomainException('Unable to send an invoice without invoice lines');
         }
 
-        $this->sentAt = new \DateTime();
+        $this->sentAt = new \DateTimeImmutable();
     }
 
-    public function isOverdue(\DateTime $date = null): bool
+    /**
+     * @param \DateTimeInterface|null $date
+     * @return bool
+     */
+    public function isOverdue(\DateTimeInterface $date = null): bool
     {
         if ($date === null) {
-            $date = new \DateTime();
+            $date = new \DateTimeImmutable();
         }
 
         if ($this->getSentAt()->diff($date)->days > $this->getPaymentTerm()->getDays()) {
