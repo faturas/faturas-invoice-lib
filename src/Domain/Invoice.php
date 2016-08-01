@@ -28,12 +28,12 @@ class Invoice
     private $invoiceLines;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $createdAt;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     private $sentAt;
 
