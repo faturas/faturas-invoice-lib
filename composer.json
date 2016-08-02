@@ -1,5 +1,5 @@
 {
-    "name": "meuk/faturas-invoice-lib",
+    "name": "faturas/faturas-invoice-lib",
     "require": {
         "php": ">=7.0.0"
     },
