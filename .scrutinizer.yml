@@ -18,3 +18,7 @@ build:
                 coverage:
                     file: 'coverage'
                     format: 'clover'
+checks:
+    php:
+        code_rating: true
+        duplication: true
