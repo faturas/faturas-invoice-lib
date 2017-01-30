@@ -43,7 +43,7 @@ class Line
 
     /**
      * @param string $description
-     * @return $this
+     * @return Line
      */
     public function setDescription($description): Line
     {
@@ -58,7 +58,7 @@ class Line
     /**
      * @return string
      */
-    public function getSummary(): string
+    public function getSummary(): ?string
     {
         return $this->summary;
     }
