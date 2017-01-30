@@ -15,6 +15,11 @@ class Invoice
     /**
      * @var integer
      */
+    private $id;
+
+    /**
+     * @var integer
+     */
     private $invoiceNumber;
 
     /**
@@ -57,6 +62,14 @@ class Invoice
 
         $this->createdAt = new \DateTimeImmutable();
         $this->invoiceLines = [];
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
@@ -222,4 +235,5 @@ class Invoice
 
         return false;
     }
+
 }
