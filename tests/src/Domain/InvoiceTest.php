@@ -171,6 +171,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomerSetter()
     {
+        /** @var Customer $customer */
         $customer = \Mockery::mock(Customer::class)
             ->shouldReceive('getEmail')->once()->andReturn('billing@media-butler.nl')
             ->getMock()
@@ -180,8 +181,20 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $invoice->setCustomer($customer);
     }
 
+    public function testInvoiceIdGetter()
+    {
+        $invoice = new Invoice(1);
+        // Little whiteboxing, shouldn't hurt right?
+        $property = new ReflectionProperty(Invoice::class, 'id');
+        $property->setAccessible(true);
+        $property->setValue($invoice, 12);
+
+        $this->assertEquals(12, $invoice->getId());
+    }
+
     public function testCustomerGetter()
     {
+        /** @var Customer $customer */
         $customer = \Mockery::mock(Customer::class)
             ->shouldReceive('getEmail')->once()->andReturn('billing@media-butler.nl')
             ->getMock()
@@ -190,6 +203,22 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $invoice = new Invoice(1);
         $invoice->setCustomer($customer);
         $this->assertEquals('billing@media-butler.nl', $invoice->getCustomer()->getEmail());
+    }
+
+    public function testNegativeInvoiceTotal()
+    {
+        $invoice = new Invoice(1);
+        $invoice->addInvoiceLine(new Invoice\Line(2, -20));
+        $this->assertEquals(-40, $invoice->getTotalAmount());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testNullDescription()
+    {
+        $invoice = new Invoice(1);
+        $invoice->addInvoiceLine((new Invoice\Line(5, 9.89))->setDescription(null));
     }
 
     public function getInvoiceLineStack()
